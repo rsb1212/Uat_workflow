@@ -1,1 +1,573 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAT Process Flow – Automation & Ownership Roadmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            padding: 10px;
+            font-size: 11px;
+        }
+        
+        .container {
+            width: 100%;
+            border: 2px solid #1a5276;
+            background: #fff;
+        }
+        
+        /* Header */
+        .main-header {
+            background: #1a5276;
+            color: white;
+            padding: 8px 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        /* Column Headers */
+        .column-headers {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            border-bottom: 2px solid #1a5276;
+        }
+        
+        .col-header {
+            background: #f0f4f7;
+            border-right: 1px solid #ccc;
+            padding: 8px 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 9px;
+            color: #1a5276;
+        }
+        
+        .col-header:last-child {
+            border-right: none;
+        }
+        
+        /* Main Content Area */
+        .flow-content {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            min-height: 650px;
+        }
+        
+        .column {
+            border-right: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            position: relative;
+            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        .column:nth-child(even) {
+            background: linear-gradient(to bottom, #f0f4f7 0%, #f8f9fa 100%);
+        }
+        
+        .column:last-child {
+            border-right: none;
+        }
+        
+        /* Flow Elements */
+        .flow-box {
+            background: #1a5276;
+            color: white;
+            padding: 8px 6px;
+            border-radius: 4px;
+            text-align: center;
+            margin: 8px auto;
+            font-size: 9px;
+            line-height: 1.3;
+            max-width: 95%;
+            position: relative;
+        }
+        
+        .flow-box.automated {
+            background: #27ae60;
+        }
+        
+        .flow-box.manual {
+            background: #1a5276;
+        }
+
+        .flow-box.manuall {
+            background: #f1204d;
+        }
+        
+        
+        .flow-box.yellow {
+            background: #27ae60;
+            color: #ffffff;
+        }
+        .note1 {
+            background: #cd9600;
+            color: #ffffff;
+             font-size: 9px;
+            border-radius: 2px;
+            padding: 2px 4px;
+        }
+        
+        .flow-box.implemented {
+            background: #27ae60;
+            /* border: 2px solid #1e8449; */
+        }
+        
+        .flow-box.start {
+            background: #d5fde5;
+            color: #1a5276;
+            border: 2px solid #1a5276;
+            border-radius: 20px;
+        }
+        
+        /* Decision Diamond */
+        .decision {
+            width: 55px;
+            height: 55px;
+            background: #ffffff;
+            border: 2px solid #1a5276;
+            transform: rotate(45deg);
+            margin: 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .decision:hover {
+            box-shadow: 5px 5px 30px rgb(168, 169, 168);
+            background: linear-gradient(to bottom right, #9bffda, #e1e970);
+            border: 2px solid #b5b5b5;
+        }
+
+        .decision span {
+            transform: rotate(-45deg);
+            font-size: 7px;
+            text-align: center;
+            color: #1a5276;
+        }
+        
+        /* Connector arrows */
+        .arrow-down {
+            text-align: center;
+            color: #1a5276;
+            font-size: 16px;
+            margin: 2px 0;
+        }
+        
+        /* Small numbered circles */
+        .step-number {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #27ae60;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 7px;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .status-implemented {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-partial {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .status-100 {
+            background: #27ae60;
+            color: white;
+        }
+        
+        /* Notes */
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 5px;
+            font-size: 8px;
+            margin: 5px;
+            border-radius: 3px;
+        }
+        
+        .note.green {
+            color: white;
+            background: #27ae60;
+            border: 1px solid #000000fe;
+        }
+        
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            padding: 2px 15px;
+            border-top: 1px solid #ddd;
+            background: #f8f9fa;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .legend-manual { background: #1a5276; }
+        .legend-automated { background: #27ae60; }
+        
+        /* Section label inside column */
+        .section-label {
+            background: #e8f4f8;
+            border: 1px dashed #1a5276;
+            padding: 4px;
+            text-align: center;
+            font-size: 8px;
+            color: #1a5276;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Main Header -->
+    <div class="main-header">UAT Process Flow – Automation & Ownership Roadmap (11 Stages)</div>
+    
+    <!-- Column Headers -->
+    <div class="column-headers">
+        <div class="col-header">1. Call Raising</div>
+        <div class="col-header">2. BRD/FRD Generation & Walkthroughs</div>
+        <div class="col-header">3. SRS/SAD Preparation</div>
+        <div class="col-header">4. Development / SIT</div>
+        <div class="col-header">5. UAT Assignment</div>
+        <div class="col-header">6. UAT Test Design</div>
+        <div class="col-header">7. UAT Prerequisites & Test Env readiness</div>
+        <div class="col-header">8. UAT Execution</div>
+        <div class="col-header">9. Defect Management </div>
+        <div class="col-header">10. Production Deployment</div>
+        <div class="col-header">11. Regression Testing</div>
+    </div>
+    
+    <!-- Flow Content -->
+    <div class="flow-content">
+        <!-- Column 1: Call Raising -->
+        <div class="column">
+            <div class="flow-box start">Start</div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Call Raise in Jira for Products, BAU, Projects
+                <span class="step-number">1</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: Business SMEs</div>
+        </div>
+        
+        <!-- Column 2: BRD/FRD Generation & Walkthroughs -->
+        <div class="column">
+            <div class="flow-box manual">
+                Collation of RGT, SOP, MOM, Process notes
+                <span class="step-number">2</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box yellow">
+                BRD Preparation via GenAI <br> (Drag & Fly)
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="note1">FRD Generator: Automated FRD creation using BRD & RGT</div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                BRD/FRD validation for Requirements
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Provide walkthrough & raise clarifications
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Queries for positive & negative scenarios
+            </div>
+
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                BRD Sign-off (Business SMEs review & approve)
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: BA/Business SMEs, UAT</div>
+            <div class="note">Automation in Progress</div>
+        </div>
+        
+        <!-- Column 3: SRS/SAD Preparation -->
+        <div class="column">
+            <div class="flow-box manual">
+                SRS/SAD Document Preparation
+                <span class="step-number">3</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Technical Specification Review
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                SRS/SAD Validation & Sign-off
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: NGIN & Bajaj Dev</div>
+        </div>
+        
+        <!-- Column 4: Development / SIT -->
+        <div class="column">
+            <div class="flow-box manual">
+                Development Phase
+                <span class="step-number">4</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Unit Testing
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                System Integration Testing (SIT) completion
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="decision">
+                <span>SIT Pass?</span>
+            </div>
+ <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Assign to UAT
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: Dev Team</div>
+            <!-- <div class="arrow-down">↓</div>
+             <div class="section-label">Assign to UAT</div> -->
+        </div>
+        
+        <!-- Column 5: UAT Assignment -->
+        <div class="column">
+            <div class="flow-box manual">
+                Reassignment to external teams (BA/IT/Users)
+                <span class="step-number">5</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Verify Parent-Child dependencies in Jira
+            </div>
+            <!-- <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                SPOC Assignment
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Validate Jira call (BRD/SRS docs)
+            </div> -->
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: UAT Manager</div>
+        </div>
+        
+        <!-- Column 6: UAT Test Design -->
+        <div class="column">
+            <div class="flow-box implemented">
+                Test Cases Generation (Nexure AI)
+                <br/><span class="status-badge status-implemented">IMPLEMENTED</span>
+                <span class="step-number">6</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Test Cases Preparation & Review
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Incorporate SME review comments
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manuall">
+                Test Cases Design Sign-off
+                <br/><small>(Business SMEs review & approve)</small>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: UAT</div>
+            <!-- <div class="note green">Nexure AI - Implemented</div> -->
+        </div>
+        
+        <!-- Column 7: Execution Prereqs -->
+        <div class="column">
+            <div class="flow-box manual">
+               Review SIT evidences & defects
+                <span class="step-number">7</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Validate Release notes (In/Out Scope)
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Confirm Deviations with Business
+            </div>
+            <!-- <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Review SIT evidences & defects
+            </div> -->
+            <div class="arrow-down">↓</div>
+            <div class="decision">
+                <span>Accept?</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: UAT Manager</div>
+        </div>
+        
+        <!-- Column 8: UAT And Preprod Execution -->
+        <div class="column">
+            <div class="flow-box automated">
+                UAT And Preprod Execution
+                <span class="step-number">8</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box yellow">
+                NGIN & Peripheral Execution
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box automated">
+                Capture execution evidences
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manuall">
+                Test Execution Initial-Review
+                <!-- <br/><small>(SMEs review for next phase)</small> -->
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manuall">
+                Record Environment Downtime RCA and Reporting
+                <!-- <br/><small>(SMEs review for next phase)</small> -->
+            </div>
+           
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: UAT</div>
+            <div class="note">Katalon Automation tool</div>
+        </div>
+        
+        <!-- Column 9: Defect Management -->
+        <div class="column">
+            <div class="flow-box manual">
+                Defect raising & Daily Reporting
+                <span class="step-number">9</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box automated">
+                Track via Jira dashboard
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manuall">
+                Defects resolution War-room
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="decision">
+                <span>Fixed?</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box automated">
+                Re-execution of Failed TC
+            </div>
+             <div class="arrow-down">↓</div>
+            <div class="flow-box manuall">
+                Test Cases Execution Evidence Sign-off
+                <br/><small>(Business SMEs review & approve)</small>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                UAT and Preprod Completion 
+            </div>
+            <div class="section-label">Resp: UAT/Manager</div>
+        </div>
+        
+        <!-- Column 10: Production Deployment -->
+        <div class="column">
+            <div class="flow-box manual">
+                Assign Jira call for Production Deployment
+                <span class="step-number">10</span>
+            </div>
+            <!-- <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Call closed by UAT Manager
+            </div> -->
+            <div class="arrow-down">↓</div>
+            <div class="flow-box start">Movement to Production</div>
+            <div class="arrow-down">↓</div>
+            <div class="section-label">Resp: UAT Manager</div>
+        </div>
+        
+        <!-- Column 11: Regression Testing -->
+        <div class="column">
+            <div class="flow-box manual">
+                Regression Test Planning
+                <span class="step-number">11</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box automated">
+                Automated Regression Execution <br>
+                In PST Environment
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box manual">
+                Regression Test Results Review
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="flow-box start" style="background:#27ae60;color:white;border:none;">End</div>
+            <div class="section-label">Resp: UAT</div>
+              <div class="note" style="text-align:center">To Be Started in September 3rd week</div>
+        </div>
+    </div>
+    
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color legend-manual"></div>
+            <span>Manual Process</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color legend-automated"></div>
+            <span>Automated / Implemented</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background:#f1204d;"></div>
+            <span>Issue and Blocker</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background:#cd9600;"></div>
+            <span>partially  Automated</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
